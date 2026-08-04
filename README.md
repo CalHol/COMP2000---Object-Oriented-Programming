@@ -8,5 +8,10 @@ Can we come up with a to do list?
 Hello?
 
 Jubril: Do we need a name for this group? Or we're all okay with lol 😄
+  |
+  v
+name can just be the frist letters of out names;
 
 ![brainrot](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0jDX3-tIN8VgtnbSHUTwlaEm4rhbr48eFBw&s)
+
+
