@@ -1,0 +1,16 @@
+# Compiled class files
+*.class
+out/
+bin/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.code-workspace
+.classpath
+.project
+.settings/
+
+# Build output
+*.jar
