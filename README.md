@@ -1,27 +1,58 @@
-<<<<<<< HEAD
-=======
-# COMP2000---Object-Oriented-Programming
-Group repository for COMP2000
+# COMP2000 — Traffic Simulation
 
-Hi Guys, anyone here???
+A Java OOP group project simulating road traffic with vehicles, intersections, and traffic lights.
 
-Can we come up with a to do list? 
+## Team
 
-Hello?
+| Name | Pair | Responsibility |
+|------|------|----------------|
+| Henry | A | Core Engine + Observer pattern |
+| TBD | A | Core Engine + Observer pattern |
+| Callum | B | Road Network + Factory pattern |
+| TBD | B | Road Network + Factory pattern |
+| Ben | C | Vehicles |
+| Jacob | C | Vehicles |
+| Addrita | D | Traffic Lights + Intersections |
+| Cam | D | Traffic Lights + Intersections |
 
-Jubril: Do we need a name for this group? Or we're all okay with lol 😄
-  |
-  v
-name can just be the frist letters of out names;
+## Project Structure
 
-Tema name is LOL
+```
+src/trafficsim/
+  Main.java                  <- entry point
+  engine/                    <- SimulationEngine, SimulationObserver, Statistics
+  view/                      <- SimulationDisplay (JPanel)
+  model/
+    road/                    <- RoadNetwork, Road, Lane, Intersection, BusStop
+    vehicle/                 <- Vehicle (abstract), Car, Truck, Bus, EmergencyVehicle
+    light/                   <- TrafficLight, LightState, RedState, GreenState, YellowState
+  factory/                   <- NetworkLoader
+  strategy/                  <- TurnStrategy, RandomTurnStrategy, WeightedRandom<T>
+  util/                      <- Direction enum, LightPhase enum
+  exception/                 <- SimulationException, InvalidNetworkException
+```
 
-Fair enough, Can we all leave our names here?
+## How to Run
 
-JUBRIL
-Callum
+Compile from the `src/` directory:
+```
+javac -d out trafficsim/Main.java $(find trafficsim -name "*.java")
+java -cp out trafficsim.Main
+```
 
-![brainrot](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0jDX3-tIN8VgtnbSHUTwlaEm4rhbr48eFBw&s)
+## Design Patterns
 
+| Pattern | Where | Rubric |
+|---------|-------|--------|
+| Inheritance | Vehicle -> Car / Truck / Bus / EmergencyVehicle | Week 7 |
+| Generics | WeightedRandom<T> | Week 7 |
+| Exceptions | SimulationException -> InvalidNetworkException | Week 7 |
+| Observer | SimulationObserver / SimulationDisplay | Week 13 |
+| State | LightState / Red / Green / YellowState | Week 13 |
+| Strategy | TurnStrategy / RandomTurnStrategy | Week 13 |
+| Factory | NetworkLoader | Week 13 |
+| Streams | Statistics | Week 13 |
 
->>>>>>> 6892bd449fd4ff32f807cb1514f2a017e8ad24ef
+## Communication
+
+Discord -- respond when possible, notify the team if you can't make a deadline.
