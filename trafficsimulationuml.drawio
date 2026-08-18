@@ -1,0 +1,301 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Traffic Simulation UML" id="0">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1950" pageHeight="1500" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="display" value="SimulationDisplay&#xa;&#171;View - JPanel&#187;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=42;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="250" height="106" as="geometry"/>
+        </mxCell>
+        <mxCell id="display_f" value="- engine: SimulationEngine" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="display">
+          <mxGeometry y="42" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="display_m" value="+ paintComponent(Graphics)&#xa;+ onSimulationStep()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="display">
+          <mxGeometry y="66" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="observer" value="«interface» SimulationObserver" style="swimlane;fontStyle=3;align=center;verticalAlign=top;horizontal=1;startSize=30;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="210" width="250" height="54" as="geometry"/>
+        </mxCell>
+        <mxCell id="observer_m" value="+ onSimulationStep()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="observer">
+          <mxGeometry y="30" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="turnstrat" value="«interface» TurnStrategy" style="swimlane;fontStyle=3;align=center;verticalAlign=top;horizontal=1;startSize=30;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="860" width="250" height="54" as="geometry"/>
+        </mxCell>
+        <mxCell id="turnstrat_m" value="+ chooseDirection(List&lt;Direction&gt;): Direction" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="turnstrat">
+          <mxGeometry y="30" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="randomturn" value="RandomTurnStrategy" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="970" width="250" height="74" as="geometry"/>
+        </mxCell>
+        <mxCell id="randomturn_f" value="- picker: WeightedRandom&lt;Direction&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="randomturn">
+          <mxGeometry y="26" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="randomturn_m" value="+ chooseDirection(List&lt;Direction&gt;): Direction" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="randomturn">
+          <mxGeometry y="50" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="weighted" value="WeightedRandom&lt;T&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=30;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1110" width="250" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="weighted_f" value="- items: List&lt;T&gt;&#xa;- weights: List&lt;Double&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="weighted">
+          <mxGeometry y="30" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="weighted_m" value="+ add(item: T, weight: double)&#xa;+ pick(): T" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="weighted">
+          <mxGeometry y="70" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="engine" value="SimulationEngine" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="560" y="40" width="250" height="186" as="geometry"/>
+        </mxCell>
+        <mxCell id="engine_f" value="- network: RoadNetwork&#xa;- observers: List&lt;SimulationObserver&gt;&#xa;- tickRate: int&#xa;- running: boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="engine">
+          <mxGeometry y="26" width="250" height="72" as="geometry"/>
+        </mxCell>
+        <mxCell id="engine_m" value="+ step()&#xa;+ run()&#xa;+ reset()&#xa;+ addObserver(SimulationObserver)&#xa;+ notifyObservers()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="engine">
+          <mxGeometry y="98" width="250" height="88" as="geometry"/>
+        </mxCell>
+        <mxCell id="network" value="RoadNetwork" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="560" y="290" width="250" height="138" as="geometry"/>
+        </mxCell>
+        <mxCell id="network_f" value="- roads: List&lt;Road&gt;&#xa;- intersections: List&lt;Intersection&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="network">
+          <mxGeometry y="26" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="network_m" value="+ addRoad(Road)&#xa;+ addIntersection(Intersection)&#xa;+ getRoads(): List&lt;Road&gt;&#xa;+ getIntersections(): List&lt;Intersection&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="network">
+          <mxGeometry y="66" width="250" height="72" as="geometry"/>
+        </mxCell>
+        <mxCell id="road" value="Road" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="560" y="500" width="250" height="122" as="geometry"/>
+        </mxCell>
+        <mxCell id="road_f" value="- x1, y1, x2, y2: int&#xa;- speedLimit: int&#xa;- lanes: List&lt;Lane&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="road">
+          <mxGeometry y="26" width="250" height="56" as="geometry"/>
+        </mxCell>
+        <mxCell id="road_m" value="+ getLanes(): List&lt;Lane&gt;&#xa;+ getSpeedLimit(): int" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="road">
+          <mxGeometry y="82" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane" value="Lane&#xa;&#171;one direction = one lane&#187;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=42;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="560" y="680" width="250" height="138" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane_f" value="- direction: Direction&#xa;- vehicles: List&lt;Vehicle&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="lane">
+          <mxGeometry y="42" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane_m" value="+ addVehicle(Vehicle)&#xa;+ removeVehicle(Vehicle)&#xa;+ getVehicles(): List&lt;Vehicle&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="lane">
+          <mxGeometry y="82" width="250" height="56" as="geometry"/>
+        </mxCell>
+        <mxCell id="vehicle" value="«abstract» Vehicle" style="swimlane;fontStyle=3;align=center;verticalAlign=top;horizontal=1;startSize=30;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="545" y="880" width="280" height="206" as="geometry"/>
+        </mxCell>
+        <mxCell id="vehicle_f" value="- x, y: int&#xa;- speed: double&#xa;- maxSpeed: double&#xa;- direction: Direction&#xa;- turnStrategy: TurnStrategy" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="vehicle">
+          <mxGeometry y="30" width="280" height="88" as="geometry"/>
+        </mxCell>
+        <mxCell id="vehicle_m" value="+ move()&#xa;+ brake()&#xa;# chooseTurn(): Direction&#xa;# stopsAtRedLight(): boolean&#xa;+ getSpeed(): double" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="vehicle">
+          <mxGeometry y="118" width="280" height="88" as="geometry"/>
+        </mxCell>
+        <mxCell id="car" value="Car" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1140" width="170" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="car_m" value="+ move()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="car">
+          <mxGeometry y="26" width="170" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="truck" value="Truck" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="560" y="1140" width="180" height="74" as="geometry"/>
+        </mxCell>
+        <mxCell id="truck_f" value="- cargoWeight: double" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="truck">
+          <mxGeometry y="26" width="180" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="truck_m" value="+ move()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="truck">
+          <mxGeometry y="50" width="180" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="bus" value="Bus" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="770" y="1140" width="200" height="106" as="geometry"/>
+        </mxCell>
+        <mxCell id="bus_f" value="- passengerCount: int&#xa;- stops: List&lt;BusStop&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="bus">
+          <mxGeometry y="26" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="bus_m" value="+ move()&#xa;+ pickUpPassengers()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="bus">
+          <mxGeometry y="66" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="emergency" value="EmergencyVehicle" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="1140" width="250" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="emergency_f" value="- sirenOn: boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="emergency">
+          <mxGeometry y="26" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="emergency_m" value="+ move()&#xa;# stopsAtRedLight(): false" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="emergency">
+          <mxGeometry y="50" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="busstop" value="BusStop" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="770" y="1300" width="200" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="busstop_f" value="- x, y: int&#xa;- name: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="busstop">
+          <mxGeometry y="26" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="busstop_m" value="+ getPosition(): int[]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="busstop">
+          <mxGeometry y="66" width="200" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="stats" value="Statistics&#xa;&#171;streams / lambdas&#187;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=42;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="880" y="40" width="290" height="98" as="geometry"/>
+        </mxCell>
+        <mxCell id="stats_m" value="+ averageSpeed(List&lt;Vehicle&gt;): double&#xa;+ stoppedCount(List&lt;Vehicle&gt;): long&#xa;+ congestionByRoad(): Map&lt;Road,Long&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="stats">
+          <mxGeometry y="42" width="290" height="56" as="geometry"/>
+        </mxCell>
+        <mxCell id="loader" value="NetworkLoader&#xa;&#171;Factory&#187;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=42;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="880" y="290" width="250" height="82" as="geometry"/>
+        </mxCell>
+        <mxCell id="loader_m" value="+ loadFromFile(String): RoadNetwork&#xa;+ buildDefault(): RoadNetwork" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="loader">
+          <mxGeometry y="42" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="exc_base" value="SimulationException&#xa;&#171;extends RuntimeException&#187;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=42;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="270" width="280" height="66" as="geometry"/>
+        </mxCell>
+        <mxCell id="exc_base_m" value="+ SimulationException(String)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="exc_base">
+          <mxGeometry y="42" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="exc_net" value="InvalidNetworkException" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="410" width="280" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="exc_net_m" value="+ InvalidNetworkException(String)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="exc_net">
+          <mxGeometry y="26" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="intersection" value="Intersection" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="880" y="500" width="250" height="122" as="geometry"/>
+        </mxCell>
+        <mxCell id="intersection_f" value="- x, y: int&#xa;- light: TrafficLight&#xa;- connectedRoads: List&lt;Road&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="intersection">
+          <mxGeometry y="26" width="250" height="56" as="geometry"/>
+        </mxCell>
+        <mxCell id="intersection_m" value="+ update()&#xa;+ getLight(): TrafficLight" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="intersection">
+          <mxGeometry y="82" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="light" value="TrafficLight" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="880" y="690" width="250" height="154" as="geometry"/>
+        </mxCell>
+        <mxCell id="light_f" value="- state: LightState&#xa;- timer: int&#xa;- greenDuration: int&#xa;- redDuration: int" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="light">
+          <mxGeometry y="26" width="250" height="72" as="geometry"/>
+        </mxCell>
+        <mxCell id="light_m" value="+ update()&#xa;+ getPhase(): LightPhase&#xa;+ isGreen(): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="light">
+          <mxGeometry y="98" width="250" height="56" as="geometry"/>
+        </mxCell>
+        <mxCell id="lightphase" value="«enum» LightPhase" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=30;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="580" width="170" height="86" as="geometry"/>
+        </mxCell>
+        <mxCell id="lightphase_f" value="RED&#xa;GREEN&#xa;YELLOW" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="lightphase">
+          <mxGeometry y="30" width="170" height="56" as="geometry"/>
+        </mxCell>
+        <mxCell id="lightstate" value="«interface» LightState" style="swimlane;fontStyle=3;align=center;verticalAlign=top;horizontal=1;startSize=30;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="710" width="230" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="lightstate_m" value="+ update(TrafficLight)&#xa;+ getPhase(): LightPhase" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="lightstate">
+          <mxGeometry y="30" width="230" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="red" value="RedState" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1520" y="650" width="180" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="red_m" value="+ update(TrafficLight)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="red">
+          <mxGeometry y="26" width="180" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="green" value="GreenState" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1520" y="780" width="180" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="green_m" value="+ update(TrafficLight)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="green">
+          <mxGeometry y="26" width="180" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="yellow" value="YellowState" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=26;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1520" y="910" width="180" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="yellow_m" value="+ update(TrafficLight)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="yellow">
+          <mxGeometry y="26" width="180" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="direction" value="«enum» Direction" style="swimlane;fontStyle=1;align=center;verticalAlign=top;horizontal=1;startSize=30;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="880" y="890" width="170" height="102" as="geometry"/>
+        </mxCell>
+        <mxCell id="direction_f" value="NORTH&#xa;SOUTH&#xa;EAST&#xa;WEST" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;html=1;" vertex="1" parent="direction">
+          <mxGeometry y="30" width="170" height="72" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge0" value="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=diamondThin;startFill=0;endArrow=none;" edge="1" parent="1" source="engine" target="network">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge1" value="observers 0..*" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;startArrow=diamondThin;startFill=0;endArrow=none;" edge="1" parent="1" source="engine" target="observer">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge2" value="uses" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=open;dashed=1;" edge="1" parent="1" source="engine" target="stats">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="display" target="observer">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge4" value="reads" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=open;endFill=1;" edge="1" parent="1" source="display" target="engine">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge5" value="1..*" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=diamondThin;startFill=0;endArrow=none;" edge="1" parent="1" source="network" target="road">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge6" value="1..*" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=diamondThin;startFill=0;endArrow=none;" edge="1" parent="1" source="network" target="intersection">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge7" value="1..*" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=diamondThin;startFill=0;endArrow=none;" edge="1" parent="1" source="road" target="lane">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge8" value="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=open;endFill=1;" edge="1" parent="1" source="intersection" target="light">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge9" value="0..*" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=diamondThin;startFill=0;endArrow=none;" edge="1" parent="1" source="lane" target="vehicle">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=block;endFill=0;" edge="1" parent="1" source="car" target="vehicle">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=block;endFill=0;" edge="1" parent="1" source="truck" target="vehicle">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=block;endFill=0;" edge="1" parent="1" source="bus" target="vehicle">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=block;endFill=0;" edge="1" parent="1" source="emergency" target="vehicle">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge14" value="state 1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=open;endFill=1;" edge="1" parent="1" source="light" target="lightstate">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=open;dashed=1;" edge="1" parent="1" source="light" target="lightphase">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="red" target="lightstate">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="green" target="lightstate">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="yellow" target="lightstate">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge19" value="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=open;endFill=1;" edge="1" parent="1" source="vehicle" target="turnstrat">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=open;dashed=1;" edge="1" parent="1" source="vehicle" target="direction">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge21" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="randomturn" target="turnstrat">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge22" value="uses" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=open;dashed=1;" edge="1" parent="1" source="randomturn" target="weighted">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge23" value="«create»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=open;dashed=1;" edge="1" parent="1" source="loader" target="network">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge24" value="«throws»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=open;dashed=1;" edge="1" parent="1" source="loader" target="exc_net">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge25" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=block;endFill=0;" edge="1" parent="1" source="exc_net" target="exc_base">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge26" value="0..*" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=diamondThin;startFill=0;endArrow=none;" edge="1" parent="1" source="bus" target="busstop">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="note_rubric" value="&lt;b&gt;Rubric -&gt; where it lives&lt;/b&gt;&lt;br&gt;Week 7:&lt;br&gt;- Inheritance: Vehicle -&gt; Car / Truck / Bus / EmergencyVehicle&lt;br&gt;- Generics: WeightedRandom&lt;T&gt;  (+ typed collections)&lt;br&gt;- Exceptions: SimulationException -&gt; InvalidNetworkException&lt;br&gt;&lt;br&gt;Week 13:&lt;br&gt;- State: LightState / Red / Green / YellowState&lt;br&gt;- Strategy: TurnStrategy / RandomTurnStrategy&lt;br&gt;- Observer: SimulationObserver (SimulationDisplay)&lt;br&gt;- Factory: NetworkLoader&lt;br&gt;- Streams / lambdas: Statistics&lt;br&gt;- Parallelism: SimulationEngine.step() (two-phase)&lt;br&gt;- Emergent behaviour: random slowdown in Vehicle.move()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#fffde7;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="990" width="560" height="360" as="geometry"/>
+        </mxCell>
+        <mxCell id="note_legend" value="&lt;b&gt;Legend&lt;/b&gt;&lt;br&gt;Blue   = engine / view / stats&lt;br&gt;Green  = road structure&lt;br&gt;Orange = vehicles (inheritance)&lt;br&gt;Purple = pattern interfaces &amp; impls&lt;br&gt;Yellow = generic class&lt;br&gt;Red    = exceptions&lt;br&gt;Grey   = enums" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#ffffff;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1550" y="40" width="300" height="180" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
