@@ -7,7 +7,7 @@ A Java OOP group project simulating road traffic with vehicles, intersections, a
 | Name | Pair | Responsibility |
 |------|------|----------------|
 | Henry | A | Core Engine + Observer pattern |
-| TBD | A | Core Engine + Observer pattern |
+| Oscar | A | Core Engine + Observer pattern |
 | Callum | B | Road Network + Factory pattern |
 | Jubril | B | Road Network + Factory pattern |
 | Ben | C | Vehicles |
