@@ -3,7 +3,6 @@ package trafficsim.model.vehicle;
 import trafficsim.strategy.TurnStrategy;
 import trafficsim.util.Direction;
 
-// TODO: [Pair C] — Ben + Jacob
 public class EmergencyVehicle extends Vehicle {
     private boolean sirenOn;
 
@@ -14,12 +13,17 @@ public class EmergencyVehicle extends Vehicle {
 
     @Override
     public void move() {
-        // TODO: advance at full speed regardless of traffic light
+        move(getMaxSpeed());
     }
 
     @Override
-    protected boolean stopsAtRedLight() {
+    public boolean stopsAtRedLight() {
         return false;
+    }
+
+    @Override
+    protected double getAcceleration() {
+        return 0.28;
     }
 
     public boolean isSirenOn() { return sirenOn; }
