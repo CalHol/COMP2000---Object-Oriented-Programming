@@ -1,0 +1,29 @@
+# TrafficSim demo network — 2x2 city block grid with a central roundabout
+# Map: 1300 x 1000 world units.
+#
+# Format:
+#   ROAD          x1 y1 x2 y2 speedLimit dir1[,dir2...]
+#   INTERSECTION  x y greenTicks yellowTicks redTicks
+#   ROUNDABOUT    x y outerRadius innerRadius
+# Blank lines and lines starting with # are ignored.
+
+# ---- East-West roads (each has EAST + WEST lanes) --------------------------
+ROAD  60 180  1240 180  60  EAST,WEST
+ROAD  60 500  1240 500  60  EAST,WEST
+ROAD  60 820  1240 820  60  EAST,WEST
+
+# ---- North-South roads ------------------------------------------------------
+ROAD  250 60   250 940  60  NORTH,SOUTH
+ROAD  650 60   650 940  60  NORTH,SOUTH
+ROAD  1050 60  1050 940 60  NORTH,SOUTH
+
+# ---- 8 signalised intersections + 1 central roundabout ---------------------
+INTERSECTION  250 180   50 6 3
+INTERSECTION  650 180   40 6 3
+ROUNDABOUT    1050 180  54 14
+INTERSECTION  250 500   45 6 3
+ROUNDABOUT    650 500   78 22
+INTERSECTION  1050 500  35 6 3
+INTERSECTION  250 820   50 6 3
+INTERSECTION  650 820   45 6 3
+INTERSECTION  1050 820  55 6 3

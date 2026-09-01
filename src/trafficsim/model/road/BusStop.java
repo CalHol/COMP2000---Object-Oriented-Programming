@@ -1,10 +1,9 @@
 package trafficsim.model.road;
 
-// TODO: [Pair B] — Callum + JUBRIL
 public class BusStop {
-    private int x;
-    private int y;
-    private String name;
+
+    private final int x, y;
+    private final String name;
 
     public BusStop(int x, int y, String name) {
         this.x = x;
@@ -13,11 +12,8 @@ public class BusStop {
     }
 
     public int[] getPosition() {
-        // TODO: return position as int[] {x, y}
-        return new int[]{x, y};
+        return new int[] { x, y };
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 }

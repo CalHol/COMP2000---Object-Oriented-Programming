@@ -2,29 +2,32 @@ package trafficsim.engine;
 
 import trafficsim.model.road.Road;
 import trafficsim.model.vehicle.Vehicle;
+
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-// TODO: [Pair A] — Henry + TBD
-public class Statistics {
+public final class Statistics {
 
-    public double averageSpeed(List<Vehicle> vehicles) {
-        // TODO: use Stream to compute average speed
+    private Statistics() {}
+
+    public static double averageSpeed(List<Vehicle> vehicles) {
         return vehicles.stream()
                 .mapToDouble(Vehicle::getSpeed)
                 .average()
                 .orElse(0.0);
     }
 
-    public long stoppedCount(List<Vehicle> vehicles) {
-        // TODO: use Stream to count vehicles with speed == 0
+    public static long stoppedCount(List<Vehicle> vehicles) {
         return vehicles.stream()
-                .filter(v -> v.getSpeed() == 0)
+                .filter(v -> v.getSpeed() == 0.0)
                 .count();
     }
 
-    public Map<Road, Long> congestionByRoad(List<Road> roads) {
-        // TODO: use Stream to count vehicles per road
-        return null;
+    public static Map<Road, Long> congestionByRoad(Map<Road, List<Vehicle>> vehiclesByRoad) {
+        return vehiclesByRoad.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> (long) e.getValue().size()));
     }
 }
