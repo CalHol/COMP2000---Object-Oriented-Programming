@@ -5,7 +5,7 @@ import trafficsim.model.light.TrafficLight;
 import trafficsim.model.road.*;
 import trafficsim.util.Direction;
 
-// TODO: [Pair B] — Callum + TBD
+// TODO: [Pair B] — Callum + JUBRIL
 public class NetworkLoader {
 
     public RoadNetwork loadFromFile(String path) throws InvalidNetworkException {

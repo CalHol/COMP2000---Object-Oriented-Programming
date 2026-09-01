@@ -1,6 +1,6 @@
 package trafficsim.model.road;
 
-// TODO: [Pair B] — Callum + TBD
+// TODO: [Pair B] — Callum + JUBRIL
 public class BusStop {
     private int x;
     private int y;

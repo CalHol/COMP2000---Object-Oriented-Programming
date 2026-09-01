@@ -3,7 +3,7 @@ package trafficsim.model.road;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: [Pair B] — Callum + TBD
+// TODO: [Pair B] — Callum + JUBRIL
 public class RoadNetwork {
     private List<Road> roads = new ArrayList<>();
     private List<Intersection> intersections = new ArrayList<>();

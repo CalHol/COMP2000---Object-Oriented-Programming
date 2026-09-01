@@ -3,7 +3,7 @@ package trafficsim.model.road;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: [Pair B] — Callum + TBD
+// TODO: [Pair B] — Callum + JUBRIL
 public class Road {
     private int x1, y1, x2, y2;
     private int speedLimit;
