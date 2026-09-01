@@ -2,13 +2,12 @@ package trafficsim.model.light;
 
 import trafficsim.util.LightPhase;
 
-// TODO: [Pair D] — Addrita + Cam
 public class YellowState implements LightState {
-    private static final int YELLOW_DURATION = 3;
-
     @Override
     public void update(TrafficLight light) {
-        // TODO: if timer >= YELLOW_DURATION, transition to RedState
+        if (light.getTimer() >= light.getYellowDuration()) {
+            light.setState(new RedState());
+        }
     }
 
     @Override

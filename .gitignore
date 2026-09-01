@@ -2,6 +2,11 @@
 *.class
 out/
 bin/
+src/out/
+
+# Debug snapshots
+*.png
+*.log
 
 # IDE files
 .idea/
