@@ -2,17 +2,19 @@ package trafficsim.engine;
 
 import trafficsim.model.road.Intersection;
 import trafficsim.model.road.Lane;
+import trafficsim.model.road.Road;
 import trafficsim.model.road.RoadNetwork;
 import trafficsim.model.vehicle.Vehicle;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: [Pair A] — Henry + TBD
+// [Pair A] Henry
 public class SimulationEngine {
     private RoadNetwork network;
     private List<SimulationObserver> observers = new ArrayList<>();
     private int tickRate;
     private boolean running;
+    private Thread loopThread;
 
     public SimulationEngine(RoadNetwork network, int tickRate) {
         this.network = network;
@@ -26,9 +28,12 @@ public class SimulationEngine {
             i.update();
         }
         // Phase 2: move all vehicles
-        for (var road : network.getRoads()) {
+        for (Road road : network.getRoads()) {
             for (Lane lane : road.getLanes()) {
-                for (Vehicle v : lane.getVehicles()) {
+                // copy to avoid ConcurrentModificationException if a vehicle
+                // leaves/enters a lane during its own move()
+                List<Vehicle> snapshot = new ArrayList<>(lane.getVehicles());
+                for (Vehicle v : snapshot) {
                     v.move();
                 }
             }
@@ -37,13 +42,49 @@ public class SimulationEngine {
     }
 
     public void run() {
+        if (running) return;
         running = true;
-        // TODO: run step() in a loop at tickRate using a Thread or Timer
+
+        // tickRate is ticks per second, so each step waits 1000/tickRate ms
+        final long tickMs = 1000L / Math.max(1, tickRate);
+
+        loopThread = new Thread(() -> {
+            while (running) {
+                long start = System.currentTimeMillis();
+                step();
+                long elapsed = System.currentTimeMillis() - start;
+                long sleep = tickMs - elapsed;
+                if (sleep > 0) {
+                    try {
+                        Thread.sleep(sleep);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                }
+            }
+        }, "sim-loop");
+        loopThread.setDaemon(true);
+        loopThread.start();
+    }
+
+    public void stop() {
+        running = false;
+        if (loopThread != null) {
+            loopThread.interrupt();
+        }
     }
 
     public void reset() {
-        running = false;
-        // TODO: clear vehicles and reset state
+        stop();
+        for (Road road : network.getRoads()) {
+            for (Lane lane : road.getLanes()) {
+                // remove all vehicles from every lane
+                new ArrayList<>(lane.getVehicles())
+                        .forEach(lane::removeVehicle);
+            }
+        }
+        notifyObservers();
     }
 
     public void addObserver(SimulationObserver observer) {
@@ -58,4 +99,5 @@ public class SimulationEngine {
 
     public RoadNetwork getNetwork() { return network; }
     public boolean isRunning() { return running; }
+    public int getTickRate() { return tickRate; }
 }
