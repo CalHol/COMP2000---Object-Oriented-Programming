@@ -1,19 +1,32 @@
 package trafficsim.model.road;
 
-public class BusStop {
+import java.util.Objects;
 
-    private final int x, y;
+public class BusStop {
+    private final int x;
+    private final int y;
     private final String name;
 
     public BusStop(int x, int y, String name) {
+        this.name = Objects.requireNonNull(
+                name,
+                "Bus stop name cannot be null.");
+
+        if (name.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Bus stop name cannot be blank.");
+        }
+
         this.x = x;
         this.y = y;
-        this.name = name;
     }
 
     public int[] getPosition() {
-        return new int[] { x, y };
+        return new int[] {x, y};
     }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
+}
 }
