@@ -26,8 +26,9 @@ import java.util.List;
 /**
  * Factory for {@link RoadNetwork} instances. Two entry points:
  * <ul>
- *   <li>{@link #buildDefault()} — hand-crafted 2×2 city block grid for the
- *       "just run it" demo.</li>
+ *   <<li>{@link #buildDefault()} — hand-crafted 2 x 2 city-block grid,
+    formed by three east-west and three north-south roads with nine
+    junction locations, for the "just run it" demo.</li>
  *   <li>{@link #loadFromFile(String)} — parse the text format documented in
  *       {@code networks/grid.txt}.</li>
  * </ul>
