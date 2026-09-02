@@ -26,21 +26,28 @@ import java.util.List;
 /**
  * Factory for {@link RoadNetwork} instances. Two entry points:
  * <ul>
- *   <<li>{@link #buildDefault()} — hand-crafted 2 x 2 city-block grid,
-    formed by three east-west and three north-south roads with nine
-    junction locations, for the "just run it" demo.</li>
- *   <li>{@link #loadFromFile(String)} — parse the text format documented in
- *       {@code networks/grid.txt}.</li>
+ * <
+ * <li>{@link #buildDefault()} — hand-crafted 2 x 2 city-block grid,
+ * formed by three east-west and three north-south roads with nine
+ * junction locations, for the "just run it" demo.</li>
+ * <li>{@link #loadFromFile(String)} — parse the text format documented in
+ * {@code networks/grid.txt}.</li>
  * </ul>
- * <p>Both entry points wire {@link Intersection}s to their {@link Road}s
+ * <p>
+ * Both entry points wire {@link Intersection}s to their {@link Road}s
  * geometrically: an intersection is "connected" to every road whose line passes
  * through the intersection's centre.
  */
 public final class NetworkLoader {
 
-    private NetworkLoader() {}
+    private NetworkLoader() {
+    }
 
     public static RoadNetwork loadFromFile(String path) {
+        if (path == null || path.isBlank()) {
+            throw new InvalidNetworkException(
+                    "Network file path cannot be null or blank.");
+        }
         RoadNetwork network = new RoadNetwork();
         int intersectionIndex = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
@@ -49,7 +56,8 @@ public final class NetworkLoader {
             while ((line = br.readLine()) != null) {
                 ln++;
                 line = line.trim();
-                if (line.isEmpty() || line.startsWith("#")) continue;
+                if (line.isEmpty() || line.startsWith("#"))
+                    continue;
                 String[] parts = line.split("\\s+");
                 switch (parts[0]) {
                     case "ROAD" -> {
@@ -80,7 +88,8 @@ public final class NetworkLoader {
                     }
                     case "ROUNDABOUT" -> {
                         if (parts.length != 5) {
-                            throw new InvalidNetworkException("line " + ln + ": ROUNDABOUT expects 4 args (x y outerR innerR)");
+                            throw new InvalidNetworkException(
+                                    "line " + ln + ": ROUNDABOUT expects 4 args (x y outerR innerR)");
                         }
                         intersectionIndex++;
                         network.addIntersection(new Roundabout(
@@ -104,28 +113,34 @@ public final class NetworkLoader {
         return network;
     }
 
-    /** 3 EW × 3 NS grid → 9 nodes (8 signalised + 1 centre roundabout), sized for a 1300×1000 map. */
+    /**
+     * 3 EW × 3 NS grid → 9 nodes (8 signalised + 1 centre roundabout), sized for a
+     * 1300×1000 map.
+     */
     public static RoadNetwork buildDefault() {
         RoadNetwork network = new RoadNetwork();
         TurnStrategy strategy = new RandomTurnStrategy();
 
-        int[] ys = {180, 500, 820};
-        int[] xs = {250, 650, 1050};
+        int[] ys = { 180, 500, 820 };
+        int[] xs = { 250, 650, 1050 };
 
-        for (int y : ys) network.addRoad(new Road(60, y, 1240, y, 60, List.of(Direction.EAST, Direction.WEST)));
-        for (int x : xs) network.addRoad(new Road(x, 60, x, 940, 60, List.of(Direction.NORTH, Direction.SOUTH)));
+        for (int y : ys)
+            network.addRoad(new Road(60, y, 1240, y, 60, List.of(Direction.EAST, Direction.WEST)));
+        for (int x : xs)
+            network.addRoad(new Road(x, 60, x, 940, 60, List.of(Direction.NORTH, Direction.SOUTH)));
 
         int i = 0;
         int[][] timings = {
-                {50, 6, 3}, {40, 6, 3}, {55, 6, 3},
-                {45, 6, 3}, {60, 6, 3}, {35, 6, 3},
-                {50, 6, 3}, {45, 6, 3}, {55, 6, 3},
+                { 50, 6, 3 }, { 40, 6, 3 }, { 55, 6, 3 },
+                { 45, 6, 3 }, { 60, 6, 3 }, { 35, 6, 3 },
+                { 50, 6, 3 }, { 45, 6, 3 }, { 55, 6, 3 },
         };
         for (int y : ys) {
             for (int x : xs) {
                 // Centre intersection becomes a ROUNDABOUT — the demo now shows both kinds.
                 if (x == 650 && y == 500) {
-                    // Big central roundabout — outer 72, inner 20; lanes offset ±9 so the ring midR (46) is well clear.
+                    // Big central roundabout — outer 72, inner 20; lanes offset ±9 so the ring midR
+                    // (46) is well clear.
                     network.addIntersection(new Roundabout(x, y, 72, 20));
                 } else {
                     int[] t = timings[i];
@@ -165,9 +180,9 @@ public final class NetworkLoader {
         Road ns1 = network.getRoads().get(3); // x=250
         Road ns2 = network.getRoads().get(4); // x=650
 
-        seed(ew1.laneFor(Direction.EAST), 80,   180, Direction.EAST,  strategy, "car");
-        seed(ew1.laneFor(Direction.EAST), 150,  180, Direction.EAST,  strategy, "truck");
-        seed(ew2.laneFor(Direction.WEST), 1220, 500, Direction.WEST,  strategy, "car");
+        seed(ew1.laneFor(Direction.EAST), 80, 180, Direction.EAST, strategy, "car");
+        seed(ew1.laneFor(Direction.EAST), 150, 180, Direction.EAST, strategy, "truck");
+        seed(ew2.laneFor(Direction.WEST), 1220, 500, Direction.WEST, strategy, "car");
 
         double[] busPos = ew2.laneFor(Direction.EAST).snapToLaneCentre(80, 500);
         Bus bus = new Bus(busPos[0], busPos[1], Direction.EAST, strategy);
@@ -175,17 +190,17 @@ public final class NetworkLoader {
         bus.addStop(new BusStop((int) stopPos[0], (int) stopPos[1], "Central"));
         ew2.laneFor(Direction.EAST).addVehicle(bus);
 
-        seed(ns1.laneFor(Direction.SOUTH), 250, 80,  Direction.SOUTH, strategy, "emergency");
+        seed(ns1.laneFor(Direction.SOUTH), 250, 80, Direction.SOUTH, strategy, "emergency");
         seed(ns2.laneFor(Direction.NORTH), 650, 920, Direction.NORTH, strategy, "car");
     }
 
     private static void seed(trafficsim.model.road.Lane lane, int cx, int cy,
-                             Direction dir, TurnStrategy strategy, String kind) {
+            Direction dir, TurnStrategy strategy, String kind) {
         double[] pos = lane.snapToLaneCentre(cx, cy);
         var v = switch (kind) {
-            case "truck"     -> new Truck(pos[0], pos[1], dir, strategy, 3500);
+            case "truck" -> new Truck(pos[0], pos[1], dir, strategy, 3500);
             case "emergency" -> new EmergencyVehicle(pos[0], pos[1], dir, strategy);
-            default          -> new Car(pos[0], pos[1], dir, strategy);
+            default -> new Car(pos[0], pos[1], dir, strategy);
         };
         lane.addVehicle(v);
     }
