@@ -88,7 +88,14 @@ public class VehicleSpawner {
         b.grow(10, 10);
         for (Road road : network.getRoads()) {
             for (Lane lane : road.getLanes()) {
-                lane.getVehicles().removeIf(v -> !b.contains(v.getX(), v.getY()));
+                // Lane.getVehicles() returns an unmodifiable view, so we go through
+                // the removeVehicle API instead of mutating the returned list directly.
+                // Safe to remove while iterating - backing list is CopyOnWriteArrayList.
+                for (Vehicle v : lane.getVehicles()) {
+                    if (!b.contains(v.getX(), v.getY())) {
+                        lane.removeVehicle(v);
+                    }
+                }
             }
         }
     }
