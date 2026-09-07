@@ -2,6 +2,18 @@
 
 A Java OOP group project simulating road traffic with vehicles, intersections, and traffic lights.
 
+## Where to start
+
+Don't read the whole codebase. Start with the per-pair guides in [`docs/`](docs/):
+
+1. Everyone reads [`docs/READ_FIRST.md`](docs/READ_FIRST.md) — overview, how to run, defence checklist.
+2. Then open **your pair's** guide only:
+   - Pair A (Ali, Henry, Oscar) — [`docs/pair-a-engine.md`](docs/pair-a-engine.md)
+   - Pair B (Callum, Jubril) — [`docs/pair-b-network.md`](docs/pair-b-network.md)
+   - Pair C (Ben, Jacob) — [`docs/pair-c-vehicles.md`](docs/pair-c-vehicles.md)
+   - Pair D (Addrita, Cam) — [`docs/pair-d-lights.md`](docs/pair-d-lights.md)
+3. Full 11-page reference (Yakov's original): [`docs/COMP2000_Traffic_Simulation_Codebase_Guide.pdf`](docs/COMP2000_Traffic_Simulation_Codebase_Guide.pdf).
+
 ## Team
 
 | Name | Pair | Responsibility |
