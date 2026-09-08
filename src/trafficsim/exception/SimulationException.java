@@ -1,11 +1,6 @@
 package trafficsim.exception;
 
-public class SimulationException extends RuntimeException {
-    public SimulationException(String message) {
-        super(message);
-    }
-
-    public SimulationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-}
+/**
+ * TODO [Jubril]: Implement SimulationException using the assigned contribution chunk.
+ * Replace this skeleton file while preserving its package path.
+ */

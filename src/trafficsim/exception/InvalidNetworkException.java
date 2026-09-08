@@ -1,11 +1,6 @@
 package trafficsim.exception;
 
-public class InvalidNetworkException extends SimulationException {
-    public InvalidNetworkException(String message) {
-        super(message);
-    }
-
-    public InvalidNetworkException(String message, Throwable cause) {
-        super(message, cause);
-    }
-}
+/**
+ * TODO [Jubril]: Implement InvalidNetworkException using the assigned contribution chunk.
+ * Replace this skeleton file while preserving its package path.
+ */

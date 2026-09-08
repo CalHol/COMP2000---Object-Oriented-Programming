@@ -36,23 +36,19 @@ src/trafficsim/
   SimConstants.java          <- central tuning knobs
   engine/                    <- SimulationEngine, SimulationObserver, Statistics,
                                 SensorReading, TrafficSensor, VehicleSpawner
-  view/                      <- SimulationDisplay (JPanel renderer), MainFrame
-  command/                   <- SimulationCommand (sealed) + Pause/Resume/Step/Reset/
-                                SetTickRate/SpawnOne commands
-  pedestrian/                <- Pedestrian, CrosswalkPedestrian, PedestrianPopulation
+  view/                      <- SimulationDisplay (JPanel renderer and keyboard controls)
   model/
     road/                    <- RoadNetwork, Road, Lane, BusStop, Intersection (sealed),
-                                SignalisedIntersection, Roundabout
+                                SignalisedIntersection
     vehicle/                 <- Vehicle (sealed abstract), Car, Truck, Bus,
-                                EmergencyVehicle, DriverProfile, VehicleVisitor
+                                EmergencyVehicle, DriverProfile
     light/                   <- TrafficLight, LightState, RedState, GreenState, YellowState
   factory/                   <- NetworkLoader
-  strategy/                  <- TurnStrategy, RandomTurnStrategy,
-                                StraightPreferredTurnStrategy, WeightedRandom<T>
+  strategy/                  <- WeightedRandom<T>
   util/                      <- Direction, LightPhase, Axis enums
   exception/                 <- SimulationException, InvalidNetworkException
 networks/
-  grid.txt                   <- default demo network (3x3 grid with 2 roundabouts)
+  grid.txt                   <- default demo network (3x3 signalised grid)
 ```
 
 ## How to Run
@@ -73,37 +69,36 @@ java -cp src/out trafficsim.Main
 
 Optional args:
 - `<network-file>` — path to a network definition (defaults to `networks/grid.txt`)
-- `--seed=<long>` — deterministic RNG seed for the shared noise source
+- `--seed=<long>` — deterministic RNG seed for spawning and driver slowdown
 
-The GUI shows a 1320×1010 top-down view. Controls in the bottom toolbar: **Pause / Resume / Step / Reset / Spawn 1** + tick-rate slider. Keyboard: `space` toggle-pause, `s` step-once, `n` spawn-one, `r` reset. Checkboxes toggle **Highlight EV** (yellow halo around emergency vehicles) and **Congestion overlay** (per-road red tint).
+The GUI shows the original 1100×700 top-down city view. Keyboard controls: `space` pauses or resumes the simulation and `r` resets it.
+The dashboard displays the generated run seed. Launching normally creates a new pattern; passing `--seed=<long>` deliberately repeats one.
 
 ## Design Patterns
 
 | Pattern | Where | Rubric |
 |---------|-------|--------|
 | Inheritance | `Vehicle` (sealed) → `Car` / `Truck` / `Bus` / `EmergencyVehicle` | Week 7 |
-| Generics | `WeightedRandom<T>`, `VehicleVisitor<R>` | Week 7 |
+| Generics | `WeightedRandom<T>` | Week 7 |
 | Exceptions | `SimulationException` → `InvalidNetworkException` | Week 7 |
 | Observer | `SimulationObserver` / `SimulationDisplay` | Week 13 |
 | State | `LightState` / `RedState` / `GreenState` / `YellowState` | Week 13 |
-| Strategy | `TurnStrategy` / `RandomTurnStrategy` / `StraightPreferredTurnStrategy` | Week 13 |
 | Factory | `NetworkLoader` (file + built-in default) | Week 13 |
-| Command | `SimulationCommand` (sealed) + 6 concrete commands | Week 13 |
-| Visitor | `VehicleVisitor<R>` over sealed `Vehicle` | Week 13 |
-| Streams / lambdas | `Statistics`, HUD chart | Week 13 |
-| Parallelism | `SimulationEngine.step` — 4-phase (lights, sensors, moves, transfers) | Week 13 |
-| Sealed hierarchies | `Vehicle`, `Intersection`, `SimulationCommand` | Modern Java |
+| Streams / lambdas | `Statistics`, network parsing, vehicle cleanup | Week 13 |
+| Threading | Background simulation loop with atomic UI snapshots | Week 13 |
+| Sealed hierarchies | `Vehicle`, `Intersection` | Modern Java |
 | Records | `SensorReading` | Modern Java |
 
 ## Features
 
-- **Fluid turns at signals** — Bezier arc interpolation, no teleporting
-- **Circulating roundabouts** — vehicles enter, arc CCW around the ring, exit at chosen direction; in-ring spacing enforced
+- **Straight-through traffic** — vehicles stay in their lane through every junction
+- **Collision avoidance** — vehicles keep a safe same-lane gap and wait while conflicting traffic clears a junction
+- **Emergency priority** — siren-on vehicles may pass red lights but wait for occupied crossings; conflicting traffic yields only when the emergency approach is clear
+- **Bus service** — buses dwell briefly at Central Station, Museum, or University when the stop serves their lane, then continue
+- **Random traffic** — production runs randomise spawn timing, boundary lane, vehicle type, driver profile, cargo weight, and slowdown behaviour; `--seed` makes it reproducible
+- **Smooth updates** — the simulation advances atomically at 30 updates per second so rendering never sees a half-updated world
 - **Adaptive signal timing** — extend green if queue exceeds threshold
-- **Day/night cycle** — 2400-tick sinusoidal, street lamps + headlight cones + varied window lighting
-- **Pedestrians** — walk block perimeters, park paths, and crosswalks (yield when their axis is green)
-- **Tunnel portals** — roads enter/exit through stone-arched openings at map edges
-- **Emergency vehicles** — blaze through traffic; nearby vehicles slow and nudge to the shoulder
+- **Australian lane placement** — vehicles spawn and travel on the left side of the road
 
 ## Communication
 
