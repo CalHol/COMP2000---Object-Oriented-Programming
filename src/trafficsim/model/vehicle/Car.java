@@ -1,6 +1,10 @@
 package trafficsim.model.vehicle;
 
-/**
- * TODO [Ben]: Implement Car using the assigned contribution chunk.
- * Replace this skeleton file while preserving its package path.
- */
+import trafficsim.util.Direction;
+
+public final class Car extends Vehicle {
+
+    public Car(double x, double y, Direction direction) {
+        super(x, y, 3.0, 18.0, direction);
+    }
+}
