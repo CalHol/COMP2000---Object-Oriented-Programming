@@ -1,5 +1,5 @@
 package trafficsim;
-// get all the other files related to the project
+
 import trafficsim.engine.SimulationEngine;
 import trafficsim.factory.NetworkLoader;
 import trafficsim.model.road.RoadNetwork;
@@ -8,7 +8,7 @@ import trafficsim.view.MainFrame;
 
 import javax.swing.SwingUtilities;
 import java.io.File;
-// main function where all the work will be done 
+
 public class Main {
 
     private static final String DEFAULT_GRID = "networks/grid.txt";
