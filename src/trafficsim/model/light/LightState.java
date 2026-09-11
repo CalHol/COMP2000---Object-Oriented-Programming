@@ -1,6 +1,8 @@
 package trafficsim.model.light;
 
-/**
- * TODO [Addrita]: Implement LightState using the assigned contribution chunk.
- * Replace this skeleton file while preserving its package path.
- */
+import trafficsim.util.LightPhase;
+
+public interface LightState {
+    void update(TrafficLight light);
+    LightPhase getPhase();
+}

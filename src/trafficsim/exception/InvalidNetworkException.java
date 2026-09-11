@@ -1,6 +1,13 @@
 package trafficsim.exception;
 
-/**
- * TODO [Jubril]: Implement InvalidNetworkException using the assigned contribution chunk.
- * Replace this skeleton file while preserving its package path.
- */
+public class InvalidNetworkException extends SimulationException {
+    private static final long serialVersionUID = 1L;
+
+    public InvalidNetworkException(String message) {
+        super(message);
+    }
+
+    public InvalidNetworkException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}

@@ -1,6 +1,17 @@
 package trafficsim.model.light;
 
-/**
- * TODO [Addrita]: Implement YellowState using the assigned contribution chunk.
- * Replace this skeleton file while preserving its package path.
- */
+import trafficsim.util.LightPhase;
+
+public class YellowState implements LightState {
+    @Override
+    public void update(TrafficLight light) {
+        if (light.getTimer() >= light.getYellowDuration()) {
+            light.setState(new RedState());
+        }
+    }
+
+    @Override
+    public LightPhase getPhase() {
+        return LightPhase.YELLOW;
+    }
+}

@@ -1,6 +1,13 @@
 package trafficsim.exception;
 
-/**
- * TODO [Jubril]: Implement SimulationException using the assigned contribution chunk.
- * Replace this skeleton file while preserving its package path.
- */
+public class SimulationException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
+
+    public SimulationException(String message) {
+        super(message);
+    }
+
+    public SimulationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}

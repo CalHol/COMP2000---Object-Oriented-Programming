@@ -1,6 +1,82 @@
 package trafficsim.model.road;
 
-/**
- * TODO [Callum]: Implement Lane using the assigned contribution chunk.
- * Replace this skeleton file while preserving its package path.
- */
+import trafficsim.model.vehicle.Vehicle;
+import trafficsim.util.Direction;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Predicate;
+
+public class Lane {
+    /**
+     * Half-width of a single lane in world units.
+     */
+    public static final int LANE_HALF_WIDTH = 9;
+
+    private final Direction direction;
+    private final CopyOnWriteArrayList<Vehicle> vehicles =
+            new CopyOnWriteArrayList<>();
+
+    private Road road;
+
+    public Lane(Direction direction) {
+        this.direction = Objects.requireNonNull(
+                direction,
+                "Lane direction cannot be null.");
+    }
+
+    /**
+     * Converts a position on the road centreline into a position
+     * at the centre of this lane.
+     */
+    public double[] snapToLaneCentre(
+            double roadCentreX,
+            double roadCentreY) {
+
+        return new double[] {
+            roadCentreX
+                    + direction.leftX() * LANE_HALF_WIDTH,
+            roadCentreY
+                    + direction.leftY() * LANE_HALF_WIDTH
+        };
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void addVehicle(Vehicle vehicle) {
+        Objects.requireNonNull(vehicle, "Vehicle cannot be null.");
+
+        if (!vehicles.addIfAbsent(vehicle)) {
+            throw new IllegalArgumentException(
+                    "The same vehicle cannot be added to a lane twice.");
+        }
+
+        vehicle.attachTo(this);
+    }
+
+    public void removeVehiclesIf(Predicate<Vehicle> condition) {
+        vehicles.removeIf(Objects.requireNonNull(condition, "Condition cannot be null."));
+    }
+
+    public void clearVehicles() {
+        vehicles.clear();
+    }
+
+    public List<Vehicle> getVehicles() {
+        return Collections.unmodifiableList(vehicles);
+    }
+
+    void setRoad(Road road) {
+        this.road = Objects.requireNonNull(
+                road,
+                "Road cannot be null.");
+    }
+
+    public Road getRoad() {
+        return road;
+    }
+}
