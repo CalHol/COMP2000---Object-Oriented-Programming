@@ -92,8 +92,6 @@ public abstract sealed class Vehicle
         this.profile = profile == null ? DriverProfile.NORMAL : profile;
     }
 
-    public DriverProfile getDriverProfile() { return profile; }
-
     // -- getters -------------------------------------------------------------
 
     public double getSpeed() { return speed; }

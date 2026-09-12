@@ -135,9 +135,10 @@ public class VehicleSpawner {
     }
 
     private static boolean laneIsCrowdedNearEntry(Lane lane, int[] entry) {
-        // 32 = enough for the longest vehicle (Bus = 24) plus MIN_GAP + half-length buffer.
+        // Keep enough room for the longest vehicle (Bus = 32) and the normal gap.
         for (Vehicle v : lane.getVehicles()) {
-            if (Math.hypot(v.getX() - entry[0], v.getY() - entry[1]) < 32) return true;
+            if (Math.hypot(v.getX() - entry[0], v.getY() - entry[1])
+                    < SimConstants.SPAWN_ENTRY_CLEARANCE) return true;
         }
         return false;
     }

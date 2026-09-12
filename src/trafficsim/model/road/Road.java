@@ -3,9 +3,10 @@ package trafficsim.model.road;
 import trafficsim.util.Direction;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class Road {
+public final class Road {
 
     private final int x1, y1, x2, y2;
     private final List<Lane> lanes = new ArrayList<>();
@@ -22,7 +23,7 @@ public class Road {
         }
     }
 
-    public List<Lane> getLanes() { return lanes; }
+    public List<Lane> getLanes() { return Collections.unmodifiableList(lanes); }
     public int getX1() { return x1; }
     public int getY1() { return y1; }
     public int getX2() { return x2; }
@@ -31,11 +32,4 @@ public class Road {
     public boolean isHorizontal() { return y1 == y2; }
     public boolean isVertical() { return x1 == x2; }
 
-    /** Find the first lane whose direction matches {@code dir}, or {@code null}. */
-    public Lane laneFor(Direction dir) {
-        for (Lane lane : lanes) {
-            if (lane.getDirection() == dir) return lane;
-        }
-        return null;
-    }
 }

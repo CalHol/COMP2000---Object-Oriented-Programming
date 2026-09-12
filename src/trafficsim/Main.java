@@ -48,6 +48,7 @@ public class Main {
 
         SwingUtilities.invokeLater(() -> {
             SimulationDisplay display = new SimulationDisplay(engine);
+            engine.addObserver(display);
             display.setPreferredSize(new java.awt.Dimension(1100, 700));
 
             JFrame frame = new JFrame("Traffic Simulation");

@@ -13,7 +13,6 @@ public final class SimConstants {
     // -- world geometry ------------------------------------------------------
     public static final int  LANE_WIDTH       = 18;   // width of one lane, world units
     public static final int  ROAD_HALF        = LANE_WIDTH;  // two-lane road → half-width == LANE_WIDTH
-    public static final int  SIDEWALK_H       = ROAD_HALF + 5;
     public static final int  INT_HALF         = ROAD_HALF + 4;
 
     // -- sensor / stopping distances ----------------------------------------
@@ -24,6 +23,7 @@ public final class SimConstants {
     // -- spawner -------------------------------------------------------------
     public static final int    SPAWN_CAP         = 40;
     public static final double SPAWN_PROBABILITY = 0.06;
+    public static final double SPAWN_ENTRY_CLEARANCE = 36.0; // bus length + normal gap
 
     // -- adaptive signals ----------------------------------------------------
     public static final int    ADAPTIVE_QUEUE_HIGH     = 4;   // vehicles queued to trigger extension

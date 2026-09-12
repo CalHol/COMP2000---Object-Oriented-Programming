@@ -8,8 +8,6 @@ import trafficsim.model.road.Intersection;
 import trafficsim.model.road.Lane;
 import trafficsim.model.road.Road;
 import trafficsim.model.vehicle.Bus;
-import trafficsim.model.vehicle.Car;
-import trafficsim.model.vehicle.DriverProfile;
 import trafficsim.model.vehicle.EmergencyVehicle;
 import trafficsim.model.vehicle.Truck;
 import trafficsim.model.vehicle.Vehicle;
@@ -35,8 +33,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("serial") // This live Swing component is never serialized.
-public class SimulationDisplay extends JPanel implements SimulationObserver {
+@SuppressWarnings("serial") // Swing panels are not persisted by this application.
+public final class SimulationDisplay extends JPanel implements SimulationObserver {
     private static final long serialVersionUID = 1L;
 
     private static final Color GRASS = new Color(34, 82, 62);
@@ -58,7 +56,6 @@ public class SimulationDisplay extends JPanel implements SimulationObserver {
             throw new IllegalArgumentException("Simulation engine cannot be null");
         }
         this.engine = engine;
-        engine.addObserver(this);
         setBackground(GRASS);
         setFocusable(true);
         installKeyBindings();
@@ -72,12 +69,14 @@ public class SimulationDisplay extends JPanel implements SimulationObserver {
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         synchronized (engine.getNetwork()) {
+            List<Vehicle> vehicles = allVehicles();
+            vehicleColours.keySet().retainAll(vehicles);
             drawCityBlocks(graphics);
             drawRoads(graphics);
             drawBusStops(graphics);
             drawIntersections(graphics);
-            drawVehicles(graphics);
-            drawDashboard(graphics);
+            drawVehicles(graphics, vehicles);
+            drawDashboard(graphics, vehicles);
         }
         graphics.dispose();
     }
@@ -193,8 +192,8 @@ public class SimulationDisplay extends JPanel implements SimulationObserver {
         graphics.fillOval(x, y, 10, 10);
     }
 
-    private void drawVehicles(Graphics2D graphics) {
-        for (Vehicle vehicle : allVehicles()) {
+    private void drawVehicles(Graphics2D graphics, List<Vehicle> vehicles) {
+        for (Vehicle vehicle : vehicles) {
             int[] size = vehicleSize(vehicle);
             int width = size[0];
             int height = size[1];
@@ -263,28 +262,9 @@ public class SimulationDisplay extends JPanel implements SimulationObserver {
         return colour;
     }
 
-    private void drawDashboard(Graphics2D graphics) {
-        List<Vehicle> vehicles = allVehicles();
-        int cars = 0;
-        int trucks = 0;
-        int buses = 0;
-        int emergencies = 0;
-        int normal = 0;
-        int aggressive = 0;
-        int cautious = 0;
-        for (Vehicle vehicle : vehicles) {
-            if (vehicle instanceof Car) cars++;
-            else if (vehicle instanceof Truck) trucks++;
-            else if (vehicle instanceof Bus) buses++;
-            else if (vehicle instanceof EmergencyVehicle) emergencies++;
-
-            if (vehicle.getDriverProfile() == DriverProfile.AGGRESSIVE) aggressive++;
-            else if (vehicle.getDriverProfile() == DriverProfile.CAUTIOUS) cautious++;
-            else normal++;
-        }
-
+    private void drawDashboard(Graphics2D graphics, List<Vehicle> vehicles) {
         graphics.setColor(new Color(12, 18, 23, 215));
-        graphics.fillRoundRect(18, 16, 324, 124, 14, 14);
+        graphics.fillRoundRect(18, 16, 324, 92, 14, 14);
         graphics.setColor(Color.WHITE);
         graphics.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
         graphics.drawString("CITY FLOW", 32, 40);
@@ -294,18 +274,14 @@ public class SimulationDisplay extends JPanel implements SimulationObserver {
                 engine.getTickCount(), vehicles.size()), 32, 59);
         graphics.drawString(String.format("avg speed %.2f  stopped %d",
                 Statistics.averageSpeed(vehicles), Statistics.stoppedCount(vehicles)), 32, 76);
-        graphics.drawString(String.format("random mix C%d T%d B%d EV%d",
-                cars, trucks, buses, emergencies), 32, 94);
-        graphics.drawString(String.format("drivers N%d A%d C%d",
-                normal, aggressive, cautious), 32, 110);
         graphics.drawString(String.format("run seed %016X",
-                engine.getRunSeed()), 32, 126);
+                engine.getRunSeed()), 32, 94);
 
         graphics.setColor(new Color(12, 18, 23, 185));
-        graphics.fillRoundRect(18, getHeight() - 45, 285, 28, 12, 12);
+        graphics.fillRoundRect(18, getHeight() - 45, 170, 28, 12, 12);
         graphics.setColor(new Color(225, 232, 235));
         graphics.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-        graphics.drawString("SPACE pause/resume    R reset", 31, getHeight() - 26);
+        graphics.drawString("SPACE pause/resume", 31, getHeight() - 26);
 
     }
 
@@ -313,18 +289,10 @@ public class SimulationDisplay extends JPanel implements SimulationObserver {
         InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getActionMap();
         inputMap.put(KeyStroke.getKeyStroke("SPACE"), "toggle-running");
-        inputMap.put(KeyStroke.getKeyStroke('R'), "reset");
         actionMap.put("toggle-running", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 engine.setPaused(!engine.isPaused());
-                repaint();
-            }
-        });
-        actionMap.put("reset", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                engine.reset();
                 repaint();
             }
         });

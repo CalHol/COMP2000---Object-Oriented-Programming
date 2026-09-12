@@ -3,10 +3,10 @@ package trafficsim.model.road;
 import trafficsim.model.vehicle.Vehicle;
 import trafficsim.util.Direction;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 
 public class Lane {
@@ -16,8 +16,7 @@ public class Lane {
     public static final int LANE_HALF_WIDTH = 9;
 
     private final Direction direction;
-    private final CopyOnWriteArrayList<Vehicle> vehicles =
-            new CopyOnWriteArrayList<>();
+    private final List<Vehicle> vehicles = new ArrayList<>();
 
     private Road road;
 
@@ -27,22 +26,6 @@ public class Lane {
                 "Lane direction cannot be null.");
     }
 
-    /**
-     * Converts a position on the road centreline into a position
-     * at the centre of this lane.
-     */
-    public double[] snapToLaneCentre(
-            double roadCentreX,
-            double roadCentreY) {
-
-        return new double[] {
-            roadCentreX
-                    + direction.leftX() * LANE_HALF_WIDTH,
-            roadCentreY
-                    + direction.leftY() * LANE_HALF_WIDTH
-        };
-    }
-
     public Direction getDirection() {
         return direction;
     }
@@ -50,20 +33,17 @@ public class Lane {
     public void addVehicle(Vehicle vehicle) {
         Objects.requireNonNull(vehicle, "Vehicle cannot be null.");
 
-        if (!vehicles.addIfAbsent(vehicle)) {
+        if (vehicles.contains(vehicle)) {
             throw new IllegalArgumentException(
                     "The same vehicle cannot be added to a lane twice.");
         }
 
+        vehicles.add(vehicle);
         vehicle.attachTo(this);
     }
 
     public void removeVehiclesIf(Predicate<Vehicle> condition) {
         vehicles.removeIf(Objects.requireNonNull(condition, "Condition cannot be null."));
-    }
-
-    public void clearVehicles() {
-        vehicles.clear();
     }
 
     public List<Vehicle> getVehicles() {

@@ -8,11 +8,7 @@ import trafficsim.model.road.Intersection;
 import trafficsim.model.road.Road;
 import trafficsim.model.road.RoadNetwork;
 import trafficsim.model.road.SignalisedIntersection;
-import trafficsim.model.vehicle.Bus;
 import trafficsim.model.road.BusStop;
-import trafficsim.model.vehicle.Car;
-import trafficsim.model.vehicle.EmergencyVehicle;
-import trafficsim.model.vehicle.Truck;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -149,7 +145,6 @@ public final class NetworkLoader {
 
         wireIntersections(network);
         addDefaultBusStops(network);
-        seedInitialVehicles(network);
         return network;
     }
 
@@ -176,35 +171,4 @@ public final class NetworkLoader {
         }
     }
 
-    private static void seedInitialVehicles(RoadNetwork network) {
-        Road ew1 = network.getRoads().get(0); // y=170
-        Road ew2 = network.getRoads().get(1); // y=350
-        Road ns1 = network.getRoads().get(3); // x=250
-        Road ns2 = network.getRoads().get(4); // x=550
-
-        seed(ew1.laneFor(Direction.EAST), 80, 170, Direction.EAST, "car");
-        seed(ew1.laneFor(Direction.EAST), 150, 170, Direction.EAST, "truck");
-        seed(ew2.laneFor(Direction.WEST), 1020, 350, Direction.WEST, "car");
-
-        double[] busPos = ew2.laneFor(Direction.EAST).snapToLaneCentre(80, 350);
-        Bus bus = new Bus(busPos[0], busPos[1], Direction.EAST);
-        for (BusStop stop : network.getBusStops()) {
-            if (stop.serves(ew2.laneFor(Direction.EAST))) bus.addStop(stop);
-        }
-        ew2.laneFor(Direction.EAST).addVehicle(bus);
-
-        seed(ns1.laneFor(Direction.SOUTH), 250, 120, Direction.SOUTH, "emergency");
-        seed(ns2.laneFor(Direction.NORTH), 550, 600, Direction.NORTH, "car");
-    }
-
-    private static void seed(trafficsim.model.road.Lane lane, int cx, int cy,
-            Direction dir, String kind) {
-        double[] pos = lane.snapToLaneCentre(cx, cy);
-        var v = switch (kind) {
-            case "truck" -> new Truck(pos[0], pos[1], dir, 3500);
-            case "emergency" -> new EmergencyVehicle(pos[0], pos[1], dir);
-            default -> new Car(pos[0], pos[1], dir);
-        };
-        lane.addVehicle(v);
-    }
 }

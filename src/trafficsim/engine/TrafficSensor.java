@@ -34,10 +34,11 @@ final class TrafficSensor {
                 ? nearestBlockedIntersection(v, network)
                 : Double.POSITIVE_INFINITY;
         double dOccupied = nearestOccupiedIntersectionStop(v, network);
+        double dEntryPriority = nearestConflictingEntryPriorityStop(v, network);
         double dIntersectionPriority = nearestEmergencyPriorityStop(v, network);
         // One SensorReading stores only the nearest reason to stop at an intersection.
         double dStop = Math.min(Math.min(dSignal, dBlocked),
-                Math.min(dOccupied, dIntersectionPriority));
+                Math.min(Math.min(dOccupied, dEntryPriority), dIntersectionPriority));
         return new SensorReading(dVehicle, dStop);
     }
 
@@ -122,8 +123,10 @@ final class TrafficSensor {
         for (Intersection i : network.getIntersections()) {
             if (!i.getConnectedRoads().contains(self.getRoad())) continue;
             double signed = signedDistanceAhead(self, i.getX(), i.getY());
-            if (signed <= SimConstants.STOP_LINE_RADIUS
-                    || signed > SimConstants.SIGHT_RANGE) continue;
+            // A vehicle that crossed the stop line but has not entered the physical
+            // junction can still stop if a conflict appears at the last moment.
+            if (signed <= 0 || signed > SimConstants.SIGHT_RANGE
+                    || isInsideIntersection(self, i)) continue;
             if (!hasConflictingVehicleInside(self, i)) continue;
 
             double d = Math.max(0.0, signed - SimConstants.STOP_LINE_RADIUS);
@@ -142,8 +145,8 @@ final class TrafficSensor {
         for (Intersection i : network.getIntersections()) {
             if (!i.getConnectedRoads().contains(self.getRoad())) continue;
             double signed = signedDistanceAhead(self, i.getX(), i.getY());
-            if (signed <= SimConstants.STOP_LINE_RADIUS
-                    || signed > SimConstants.SIGHT_RANGE) continue;
+            if (signed <= 0 || signed > SimConstants.SIGHT_RANGE
+                    || isInsideIntersection(self, i)) continue;
 
             boolean mustYield = selfHasSiren
                     ? hasHigherPriorityConflictingEmergency(self, i, signed)
@@ -173,6 +176,59 @@ final class TrafficSensor {
             }
         }
         return false;
+    }
+
+    private static boolean isInsideIntersection(Vehicle vehicle, Intersection intersection) {
+        double occupiedRadius = SimConstants.INTERSECTION_TILE_RADIUS
+                + vehicle.getLength() / 2.0;
+        return Math.hypot(vehicle.getX() - intersection.getX(),
+                vehicle.getY() - intersection.getY()) <= occupiedRadius;
+    }
+
+    /**
+     * Prevent two perpendicular vehicles from crossing the junction boundary in
+     * the same tick. For normal traffic, the currently green axis wins. Emergency
+     * priority is handled separately below.
+     */
+    private static double nearestConflictingEntryPriorityStop(
+            Vehicle self, RoadNetwork network) {
+        if (self instanceof EmergencyVehicle ev && ev.isSirenOn()) {
+            return Double.POSITIVE_INFINITY;
+        }
+        double best = Double.POSITIVE_INFINITY;
+        for (Intersection intersection : network.getIntersections()) {
+            if (!intersection.getConnectedRoads().contains(self.getRoad())) continue;
+            double signed = signedDistanceAhead(self, intersection.getX(), intersection.getY());
+            if (signed <= 0 || signed > SimConstants.SIGHT_RANGE
+                    || isInsideIntersection(self, intersection)) continue;
+            if (intersection.getLight().phaseFor(self.getDirection()) == LightPhase.GREEN) continue;
+
+            for (Road road : intersection.getConnectedRoads()) {
+                for (Lane lane : road.getLanes()) {
+                    if (Axis.of(lane.getDirection()) == Axis.of(self.getDirection())) continue;
+                    if (intersection.getLight().phaseFor(lane.getDirection()) != LightPhase.GREEN) continue;
+                    for (Vehicle other : lane.getVehicles()) {
+                        if (other instanceof EmergencyVehicle) continue;
+                        if (!willEnterNextTick(other, intersection)) continue;
+                        double d = Math.max(0.0, signed - SimConstants.STOP_LINE_RADIUS);
+                        if (d < best) best = d;
+                    }
+                }
+            }
+        }
+        return best;
+    }
+
+    private static boolean willEnterNextTick(Vehicle vehicle, Intersection intersection) {
+        if (isInsideIntersection(vehicle, intersection)) return false;
+        double signed = signedDistanceAhead(vehicle, intersection.getX(), intersection.getY());
+        if (signed <= 0) return false;
+        double occupiedRadius = SimConstants.INTERSECTION_TILE_RADIUS
+                + vehicle.getLength() / 2.0;
+        double distanceFromCentre = Math.hypot(vehicle.getX() - intersection.getX(),
+                vehicle.getY() - intersection.getY());
+        // One unit also covers a vehicle that will accelerate from a near stop.
+        return distanceFromCentre - occupiedRadius <= Math.max(1.0, vehicle.getSpeed());
     }
 
     private static boolean hasApproachingConflictingEmergency(

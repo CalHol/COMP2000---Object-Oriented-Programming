@@ -59,12 +59,12 @@ Optional args:
 - `<network-file>` — path to a network definition (defaults to `networks/grid.txt`)
 - `--seed=<long>` — deterministic RNG seed for spawning and driver slowdown
 
-The GUI shows the original 1100×700 top-down city view. Keyboard controls: `space` pauses or resumes the simulation and `r` resets it.
+Requires Java 17 or newer. The GUI shows the original 1100×700 top-down city view. Press `space` to pause or resume the simulation.
 The dashboard displays the generated run seed. Launching normally creates a new pattern; passing `--seed=<long>` deliberately repeats one.
 
 ## Design Patterns
 
-| Pattern | Where | Rubric |
+| Concept | Where | Submission stage |
 |---------|-------|--------|
 | Inheritance | `Vehicle` (sealed) → `Car` / `Truck` / `Bus` / `EmergencyVehicle` | Week 7 |
 | Generics | `WeightedRandom<T>` | Week 7 |
@@ -73,7 +73,7 @@ The dashboard displays the generated run seed. Launching normally creates a new 
 | State | `LightState` / `RedState` / `GreenState` / `YellowState` | Week 13 |
 | Factory | `NetworkLoader` (file + built-in default) | Week 13 |
 | Streams / lambdas | `Statistics`, network parsing, vehicle cleanup | Week 13 |
-| Threading | Background simulation loop with atomic UI snapshots | Week 13 |
+| Threading | Background simulation loop with lock-protected complete updates | Week 13 |
 | Sealed hierarchies | `Vehicle`, `Intersection` | Modern Java |
 | Records | `SensorReading` | Modern Java |
 
@@ -91,3 +91,7 @@ The dashboard displays the generated run seed. Launching normally creates a new 
 ## Communication
 
 Discord — respond when possible, notify the team if you can't make a deadline.
+
+## AI Use Acknowledgement
+
+Generative AI tools were used to help review, explain, debug, and refine parts of the code and documentation. The submitted work was checked by the student, who remains responsible for understanding and explaining it.

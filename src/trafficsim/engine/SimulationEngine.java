@@ -113,12 +113,6 @@ public class SimulationEngine {
         running = false;
     }
 
-    public void reset() {
-        for (Road road : network.getRoads())
-            for (Lane lane : road.getLanes()) lane.clearVehicles();
-        tickCount = 0;
-    }
-
     public void setPaused(boolean paused) { this.paused = paused; }
     public boolean isPaused() { return paused; }
     public long getTickCount() { return tickCount; }
